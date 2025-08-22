@@ -10,9 +10,9 @@ void main(List<String> arguments) {
   double Mengenrabatt = 0;
   double Mindestzuschlag = 0;
   // ---- testdaten --------
-  //orderValue=18.5; distance=4.2; rushHour=false; isRaining=false; orderSize=2;
+  orderValue=18.5; distance=4.2; rushHour=false; isRaining=false; orderSize=2;
   //orderValue=55.9; distance=8.8; rushHour=true; isRaining=true; orderSize=6;
-  orderValue=12.4; distance=11.2; rushHour=false; isRaining=false; orderSize=1;
+  //orderValue=12.4; distance=11.2; rushHour=false; isRaining=false; orderSize=1;
 
   //  Grundliefergebühr
   if (distance <= 5){

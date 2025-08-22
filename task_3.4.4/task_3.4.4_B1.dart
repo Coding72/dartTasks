@@ -5,9 +5,9 @@ enum weather {sunny, rainy, stormy}
 void main(){ 
 
   // ##### Declaration & Initialisation #####
-  chars eCharacter = chars.archer;
-  dayTimes eDayTimes = dayTimes.noon;
-  weather eWeather = weather.rainy;
+  chars eCharacter = chars.mage;
+  dayTimes eDayTimes = dayTimes.night;
+  weather eWeather = weather.stormy;
 
   Map<chars,String> charNames = {chars.warrior:"Krieger", chars.mage:"Magier", chars.archer:"Bogenschütze"};
   Map<dayTimes,String> dayTimeNames = {dayTimes.morning:"Morgens", dayTimes.noon:"bei Tag", dayTimes.night:"Nachts"};

@@ -155,12 +155,12 @@ void main() {
 ``` Dart
 import "dart:math";
 
-enum numberAttributes {min, max, posmax, posmin, negativ, positiv, gerade, ungerade}
+enum numberAttributes { min, max, posmax, posmin, negativ, positiv, gerade, ungerade }
 
 // Implementiere folgende Funktionen:
 void findAndPrintExtreme(List<int> numbers) {
   // Findet und gibt kleinste und größte Zahl aus
-  // Zeigt auch deren Position in der Liste  
+  // Zeigt auch deren Position in der Liste
   Map<numberAttributes, int> mNumberAttributes = <numberAttributes, int>{ numberAttributes.min:0, numberAttributes.max:0 };
   List<int> posMin = [];
   List<int> posMax = [];
@@ -226,14 +226,23 @@ void printDistribution(List<int> pnumbers) {
     }
   }
 
+// letzte Zahl wird nicht berücksichtigt, ist noch unvollständig.
+print ( numbers);
   int count = 1;
   for (int i=0; i<numbers.length; i++){    
     if (i>0){
-      if (numbers[i-1]==numbers[i]){ 
-        count++;        
+      if (numbers[i-1]==numbers[i]){
+        count++;    
       } else {
-        print("Zahl: ${numbers[i]}: $count mal.");
+        print("Zahl: ${numbers[i-1]}: $count mal.");
         count=1;
+      }
+      if (i==numbers.length-1){
+        if (numbers[i-1]==numbers[i]){
+          count++;
+          print("Zahl: ${numbers[i]}: $count mal.");
+        }
+        else {count=1; print("Zahl: ${numbers[i]}: $count mal.");} 
       }
     }
   }
@@ -244,8 +253,8 @@ void printDistribution(List<int> pnumbers) {
 void analyzeNumbers(List<int> numbers) {
   // Ruft alle Funktionen der Reihe nach auf
   // Gibt eine übersichtliche Gesamtanalyse
-  findAndPrintExtreme(numbers);
-  printNumberTypes(numbers);
+ // findAndPrintExtreme(numbers);
+ // printNumberTypes(numbers);
   printDistribution(numbers);
 }
 
@@ -259,7 +268,9 @@ void gen_random_list(List<int> numbers, [int count=0]){
 
 void main() {
 
+
   List<int> numbers = [1];
+  // numbers = [-1, 2, 2, 4, 3, 3, 2];
 
   gen_random_list(numbers);
 

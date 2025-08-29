@@ -111,7 +111,7 @@ void handleInput(){
 
 void addTask(String task){
   if (task.trim().length>0){
-    todoList.add({task:false});
+    todoList.add({task.trim():false});
   } else {
     print("${tab}keine Aufgabe angegeben !");
   }

@@ -72,6 +72,11 @@ int calcAlternative_Harry(String text) {
   return count;
 }
 
+int countVowels_Melanie(String text){
+  const vowels = "aeiouäöü";
+  return text.toLowerCase().split('').where((char) => vowels.contains(char)).length;
+}
+
 
 void main() {
 
@@ -124,5 +129,10 @@ void main() {
   print('Die Funktion calcAlternative von Harry hat ${stopwatch.elapsedMilliseconds} Millisekunden benötigt.');
   print("----------------------------------------------");
 
+  stopwatch = Stopwatch()..start(); 
+  for(int i=0;i<count;i++){ countVowels_Melanie(t); } // großbuchstaben nicht berücksichtigt
+  stopwatch.stop();
+  print('Die Funktion countVowels von Melanie  hat ${stopwatch.elapsedMilliseconds} Millisekunden benötigt.');
+  print("----------------------------------------------");
 
 }

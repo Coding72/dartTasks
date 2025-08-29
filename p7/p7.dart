@@ -49,14 +49,14 @@ void printUsage_EN(){
       undone <index>         - mark task as undone
       exit                   - exit program
   """;
-  usage = 
+/*  usage = 
   """
     Usage:
       add <todo>      
       list
       done <todo-ID>
       exit
-  """;
+  """;*/
   print(usage);
 }
 

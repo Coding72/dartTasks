@@ -1,20 +1,27 @@
-//#region [rgba(165,245,205,0.1)] =====  =====
+//#region [rgba(165,245,205,0.1)] ===== todo =====
   /**
    * @todo
   */
-//#endregion =====  =====
+//#endregion ===== todo =====
 
 //#region [rgba(165,245,205,0.1)] ===== imports =====
+  import 'dart:convert';
   import "dart:io";
 //#endregion ===== imports =====
 
 //#region [rgba(165,245,205,0.1)] ===== globals =====
+  enum Color {Black, Red, Green, Yellow, Blue, LightBlue, Magenta, Cyan, White, Default, Reset}
+  Map<Color,String> fontColor = { Color.Black:"30", Color.Red:"31", Color.Green:"32", Color.Yellow:"33", Color.Blue:"34", Color.LightBlue:"38;2;150;180;250", Color.Magenta:"35", Color.Cyan:"36", Color.White:"37", Color.Default:"39", Color.Reset:"0" };
+  Map<Color,String> backColor = { Color.Black:"40", Color.Red:"41", Color.Green:"42", Color.Yellow:"43", Color.Blue:"44", Color.Magenta:"45", Color.Cyan:"46", Color.White:"47", Color.Default:"49", Color.Reset:"0" };
+
   List<Map<String,bool>> todoList = [];  // id->{"todo":done?}   
   String tab = "    ";
+  String fileName = "todolist.json";
 //#endregion ===== globals =====
 
 void main(){
-  stdout.write('\x1B[2J\x1B[H');
+  stdout.write('\x1B[2J\x1B[H'); // clearScreen
+  
   printUsage_EN();  
 
   handleInput();
@@ -47,6 +54,8 @@ void printUsage_EN(){
       list.undone            - list tasks that are done
       done <index>           - mark task as done
       undone <index>         - mark task as undone
+      save                   - save the list to hard disk drive
+      load                   - load the list from hard disk drive
       exit                   - exit program
   """;
 /*  usage = 
@@ -63,7 +72,7 @@ void printUsage_EN(){
 void handleInput(){
   
   Map<String, String> checkInput(String userInput){ //no subcmds
-    List<String> commands = ["add", "list", "exit", "done", "clear", "undone", "remove", "list.done", "list.undone", "reset", "help"];
+    List<String> commands = ["add", "list", "exit", "done", "clear", "undone", "remove", "list.done", "list.undone", "reset", "help", "save", "load"];
     Map<String, String>  inputs = {};
     String cmd = "";
     String parameter = "";
@@ -100,8 +109,10 @@ void handleInput(){
       case "undone"       : int? number = int.tryParse(inputs["param1"]??""); setDone(number??-1, false); // change datum
       case "clear"        : stdout.write('\x1B[2J\x1B[H'); // printUsage_EN();
       case "reset"        : resetList();
-      case "list.done"   : showList("done");
-      case "list.undone" : showList("undone");
+      case "list.done"    : showList("done");
+      case "list.undone"  : showList("undone");
+      case "save"         : saveList();
+      case "load"         : loadList();
       case "help"         : printUsage_EN();
       default: stdout.writeln("${tab}Falsche eingabe");
     }
@@ -155,4 +166,46 @@ void showList([String selection="all"]){
   if (i==0){
     print("${tab}Die Liste ist leer !");
   }
+}
+
+void saveList(){
+  try {
+    String jsonString = jsonEncode(todoList);
+    File("${fileName}").writeAsStringSync(jsonString);
+    printOKMessage('Liste erfolgreich gespeichert.');
+  } catch (e) {
+    printErrorMessage('Fehler beim Speichern der Liste: $e');
+  }
+}
+
+void loadList(){
+  try {
+    File datei = File("${fileName}");
+    if (!datei.existsSync()) {
+      printErrorMessage('Die Datei existiert nicht.');
+      return;
+    }
+    String jsonString = datei.readAsStringSync();
+    List<String> todoList = List<String>.from(jsonDecode(jsonString));
+    printOKMessage('List geladen.');
+  } catch (e) {
+    //printErrorMessage('Fehler beim Laden der Liste: $e');
+    printErrorMessage('Fehler beim Laden der Liste.');
+  }
+
+}
+
+void printOKMessage(String msg){
+  printMessage(msg, Color.Green);
+}
+
+void printErrorMessage(String msg){
+  printMessage(msg, Color.Red);
+}
+
+void printMessage(String msg, [Color fc = Color.White]){  
+  stdout.write("\x1B[${fontColor[fc]}m\x1B[1m");
+  stdout.writeln("${tab}${msg}");
+  fc = Color.Reset;
+  stdout.write("\x1B[${fontColor[fc]}m\x1B[1m");
 }

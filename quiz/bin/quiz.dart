@@ -11,14 +11,14 @@
   enum enumOperatoren {and, or, not, nand, nor, xand, xor, asr, asl, lsr, rr, rl}
   enum Color {Black, Red, Green, Yellow, Blue, LightBlue, Magenta, Cyan, White, Default, Reset}
 
-  int maxtime = 60; //dieser default in den task
+  int maxtime = 30; //dieser default in den task
   int timeout = maxtime;  
   int cursorPosX = 0;
   int cursorPosY = 0;
   int inputcursorposx = 0;
   int maxInputLength = 0;
   int TimerPosX = 0;
-  int TimerPoxY = 0;
+  int TimerPosY = 0;
   int points = 0;
   bool blockinput = false;
   
@@ -51,7 +51,7 @@ void main() async {
 }
 
 void startNewTask(){
-  cursorPosX=0; cursorPosY++; TimerPoxY++;
+  cursorPosX=0; cursorPosY++; TimerPosY++;
   task = buildTask();
   writeChar((task["task"]??""));
   setCursor();
@@ -62,33 +62,34 @@ void startNewTask(){
   blockinput=false;  
   timeout=maxtime;
   stdout.write("\x1B[?25l"); //Cursor unsichtbar machen
-  writeAt(TimerPosX, TimerPoxY, "Zeit: ");
-  writeAt(TimerPosX+6, TimerPoxY, "$timeout");
+  writeAt(TimerPosX, TimerPosY, "Zeit: ");
+  writeAt(TimerPosX+6, TimerPosY, "$timeout");
   setCursor();
 }
 
 void addPoints(int p){  
-  writeAt(TimerPosX+13, TimerPoxY, "Punkte: ", Color.LightBlue);
+  writeAt(TimerPosX+13, TimerPosY, "Punkte: ", Color.LightBlue);
   blockinput = true;
   int sum = points+p;
+  if (sum<0){sum=0;}
   timer_02 = Timer.periodic(Duration(milliseconds: 1), (Timer t) {     
     if (p>=0){   
       if (points > sum) { 
         points-=10;
         if (points<0){points=0;}
-        writeAt(TimerPosX+20, TimerPoxY, "${points}", Color.LightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
       } else {
         points = sum;
-        writeAt(TimerPosX+20, TimerPoxY, "${points}", Color.LightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
         blockinput = true; t.cancel(); startNewTask(); // startNewTask();
       }
     }else{
       if (points < sum) { 
         points+=10;
-        writeAt(TimerPosX+20, TimerPoxY, "${points}", Color.LightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
       } else {
         points = sum;
-        writeAt(TimerPosX+20, TimerPoxY, "${points}", Color.LightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
         blockinput = true;  t.cancel(); startNewTask();//startNewTask(); 
       }
     }    
@@ -172,15 +173,16 @@ Map<String, String> buildTask(){
 void checkBadge(){
   String myBadge = "";
   switch (points){
-    case >1200 : myBadge = "Gold"; showEndScreen();
+    case >1200 : myBadge = "Gold";
     case >1000 : myBadge = "Silber";  
     case >800 : myBadge = "Platin";
     case >600 : myBadge = "Bronze";
     case >400 : myBadge = "Abzeichen";   
     default:
   }
-   writeAt(TimerPosX+33, TimerPoxY, "                  ");
-  if (myBadge.length>0){ writeAt(TimerPosX+33, TimerPoxY, "(${myBadge})", Color.Yellow); }
+   writeAt(TimerPosX+33, TimerPosY, "                  ");
+  if (myBadge.length>0){ writeAt(TimerPosX+33, TimerPosY, "(${myBadge})", Color.Yellow); }
+  if ( myBadge == "Gold"){ showEndScreen();}
 }
 
 void showEndScreen(){
@@ -241,13 +243,12 @@ void printTask(){
 }
 
 void checkResult(){
-  writeAt(TimerPosX, TimerPoxY, "                                ");
+  writeAt(TimerPosX, TimerPosY, "                                ");
   if (myResult.join()==task["result"]){
-    writeAt(TimerPosX, TimerPoxY, "richtig", Color.Green);    
+    writeAt(TimerPosX, TimerPosY, "richtig", Color.Green); addPoints(timeout*10);   
   } else {
-    writeAt(TimerPosX, TimerPoxY, "falsch ", Color.Red);
+    writeAt(TimerPosX, TimerPosY, "falsch ", Color.Red); if (timeout>0){addPoints( (maxtime-timeout)*-10);} else {timeout*10;}
   }
-  addPoints(timeout*10);
 }
 
 void handleTimer_01(){
@@ -255,7 +256,7 @@ void handleTimer_01(){
     checkResult();
   }
   stdout.write("\x1B[?25l"); //Cursor unsichtbar machen
-  writeAt(TimerPosX+6, TimerPoxY, "$timeout");
+  writeAt(TimerPosX+6, TimerPosY, "$timeout");
   stdout.write("\x1B[?25h"); //Cursor sichtbar machen
   setCursor();
 }
@@ -278,7 +279,7 @@ void reset(){
   cursorPosX = 0;
   cursorPosY = 2;   
   TimerPosX = 36;
-  TimerPoxY = 2;
+  TimerPosY = 2;
   timeout = maxtime;
   stdout.write("\x1B[2J"); // Bildschirm löschen 
   stdout.write("\x1B[=19h");
@@ -326,7 +327,7 @@ void showRules(){
     Willkommen zum Bit-Operations-Quiz! Hier ist, wie es funktioniert:
 
     Ziel: Dir werden zwei 4-Bit-Zahlen (z. B. 1010 und 1100) und eine Bit-Operation (wie AND, OR, XOR usw.) angezeigt. Berechne das richtige Ergebnis der Operation in Binärform.
-    Zeitlimit: Du hast pro Aufgabe 60 Sekunden Zeit, um die richtige Antwort zu geben.
+    Zeitlimit: Du hast pro Aufgabe 30 Sekunden Zeit, um die richtige Antwort zu geben.
     Punktevergabe: Für jede richtige Antwort erhältst du die verbleibende Zeit (in Sekunden) multipliziert mit 10 als Punkte. Beispiel: Wenn du in 20 Sekunden antwortest, bekommst du 10 Sekunden × 10 = 100 Punkte.
     Abzeichen/Trophäen: Erreiche bestimmte Punktzahlen, um coole Abzeichen oder Trophäen freizuschalten! Je mehr Punkte, desto bessere Belohnungen.
     Bit-Operationen: Hier eine kurze Übersicht der möglichen Operationen:

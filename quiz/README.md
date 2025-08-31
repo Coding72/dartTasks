@@ -1,6 +1,21 @@
-### todo
 
-#### Mathequiz
+
+## Wichtig: dart pub get (neu je nach OS)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Mathequiz todo
 Reihen, folgen, geometrisch, arythmetisch
 2 4 6 8 ... immer (n+1)*2, die ersten 5
 3 6 

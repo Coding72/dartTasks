@@ -17,6 +17,7 @@
 
   String tab = "      ";
   String fileName = "vocabulary_DE-RU.json";
+  int points = 0;
 
   enum Color {black, red, green, yellow, blue, lightBlue, magenta, cyan, white, _default, reset}
   Map<Color,String> fontColor = { Color.black:"30", Color.red:"31", Color.green:"32", Color.yellow:"33", Color.blue:"34", Color.lightBlue:"38;2;150;180;250", Color.magenta:"35", Color.cyan:"36", Color.white:"37", Color._default:"39", Color.reset:"0" };
@@ -30,9 +31,11 @@
 void main(List<String> arguments) {
   //doIntercepts();
 
-  //testDatas();
+  testDatas();
   printMenuDE();
   menuInput();
+
+  //testVocabulary();
 
 }
 
@@ -202,17 +205,21 @@ void testVocabulary(){
       RegExp regex = RegExp(r'^[a-zA-ZäöüÄÖÜß]+$');
       isValid = regex.hasMatch(wordLang);
 
-      if (wordLang=="3"){ printErrorMessage("Abbruch"); myBreak = true; }
-      if (isValid){ 
-        if (wordLang == word.value){printOKMessage("Richtig\n");}else{printErrorMessage("Falsch\n");}
-        break;
-      } else { printErrorMessage("Falsche eingabe. Nicht erlaubte Zeichen !"); }
-    
-    }
-    printMenuDE(); 
-    break;
+      if (wordLang.isEmpty) { printMessage("Richtig wäre \"${word.value}\" gewesen."); break; }
+      if (wordLang=="3"){ printErrorMessage("Abbruch"); myBreak = true; } else {
+        if (isValid){ 
+          if (wordLang == word.value){ printOKMessage("Richtig\n"); points++; }else{printErrorMessage("Falsch\n");}
+          break;
+        } else { printErrorMessage("Falsche eingabe. Nicht erlaubte Zeichen !"); }        
+      }
+    }  
+    if (myBreak){ break; } 
   }
- 
+
+  printMessage("Ergebnis $points von ${vocabulary.length} richtige - \"${ ((points / 112)*100 ~/ 1) }% richtige.");   
+  print("--- Weiter mit Enter oder Leertaste --- ");
+  stdin.readByteSync();
+  printMenuDE(); 
 }
 
 void clearScreen(){ stdout.write("\x1B[2J\x1B[K");	}

@@ -1,0 +1,9 @@
+für spätere Version evtl. Klasse für User
+
+ansonsten benötige ich keine Klasse
+die Fragen werden mit Maps und Listen gespeichert/erstellt.
+
+da ich vorerst nur einen User habe, der nichts angeben soll, wird hier keine Klasse benötigt.
+
+
+

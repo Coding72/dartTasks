@@ -12,6 +12,10 @@ class User { //nicht notwendig
 
 }
 
+//
+
+//class QuizQuestion {}
+
 //class Game {} nicht notwendig
 //class Fragen {} nicht notwendig
 

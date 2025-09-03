@@ -1,32 +1,31 @@
-// my classes here
-// das file umbenennen
-// Klassen sind in meinem Projekt nicht notwendig
+class Benutzer {
 
-class User { //nicht notwendig
-  //
   int id = 0;
-  int points = 0;
-  // int correct = 0;
-  // int wrong = 0;
-  User({id=1});
+  String frisur = "";
+  int alter = 0;
+
+  Benutzer(this.id, this.frisur, this.alter);
 
 }
 
-//
 
-//class QuizQuestion {}
+class Fragen {
 
-//class Game {} nicht notwendig
-//class Fragen {} nicht notwendig
+  String frage = "";
+  String antwort = "";
+  int zeit = 0; 
 
-
-/*
-nicht notwendig
-class Menu{
-
+  Fragen(this.frage, this.antwort, this.zeit);
 
 }
 
-*/
+class Spiel {
+  int durchgaenge = 0;
+  int leben = 0;
+  int dauer = 0;
+
+  Spiel(this.durchgaenge, this.leben, this.dauer);
+}
+
 
 

@@ -1,9 +1,21 @@
-für spätere Version evtl. Klasse für User
+webcrawler, lade daten
 
-ansonsten benötige ich keine Klasse
-die Fragen werden mit Maps und Listen gespeichert/erstellt.
+evtl. sqlite
 
-da ich vorerst nur einen User habe, der nichts angeben soll, wird hier keine Klasse benötigt.
+User
+  id 
+
+  neues game:
+  user attribute
+    leben
+    punkte
+    
 
 
 
+
+
+
+
+
+  

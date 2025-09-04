@@ -8,8 +8,8 @@
 //#endregion ===== import =====
 
 //#region [rgba(20,60,90,0.5)]  ===== globals =====
-  enum EnumOperatoren {and, or, not, nand, nor, xand, xor, asr, asl, lsr, rr, rl}
-  enum Color {black, red, green, yellow, blue, lightBlue, magenta, cyan, white, _default, reset}
+  enum enumOperatoren {and, or, not, nand, nor, xand, xor, asr, asl, lsr, rr, rl}
+  enum Color {Black, Red, Green, Yellow, Blue, LightBlue, Magenta, Cyan, White, Default, Reset}
 
   int maxtime = 30; //dieser default in den task
   int timeout = maxtime;  
@@ -17,12 +17,12 @@
   int cursorPosY = 0;
   int inputcursorposx = 0;
   int maxInputLength = 0;
-  int timerPosX = 0;
-  int timerPosY = 0;
+  int TimerPosX = 0;
+  int TimerPosY = 0;
   int points = 0;
   bool blockinput = false;
   
-  Map<Color,String> fontColor = { Color.black:"30", Color.red:"31", Color.green:"32", Color.yellow:"33", Color.blue:"34", Color.lightBlue:"38;2;150;180;250", Color.magenta:"35", Color.cyan:"36", Color.white:"37", Color._default:"39", Color.reset:"0" };
+  Map<Color,String> fontColor = { Color.Black:"30", Color.Red:"31", Color.Green:"32", Color.Yellow:"33", Color.Blue:"34", Color.LightBlue:"38;2;150;180;250", Color.Magenta:"35", Color.Cyan:"36", Color.White:"37", Color.Default:"39", Color.Reset:"0" };
   /*Map<Color,String> backColor = { Color.Black:"40", Color.Red:"41", Color.Green:"42", Color.Yellow:"43", Color.Blue:"44", Color.Magenta:"45", Color.Cyan:"46", Color.White:"47", Color.Default:"49", Color.Reset:"0" };
   Map<String,String> charsets = {"alphanum":"A-Za-z0-9öüäßÖÜÄ", "alpha":"A-Za-zöüäßÖÜÄ", "num": "0-9", "bit":"0-1"};
   Map<String,String> result = {"charset":"", "result":""}; //zähle später beim input die zeichen baue task neu
@@ -51,7 +51,7 @@ void main() async {
 }
 
 void startNewTask(){
-  cursorPosX=0; cursorPosY++; timerPosY++;
+  cursorPosX=0; cursorPosY++; TimerPosY++;
   task = buildTask();
   writeChar((task["task"]??""));
   setCursor();
@@ -62,13 +62,13 @@ void startNewTask(){
   blockinput=false;  
   timeout=maxtime;
   stdout.write("\x1B[?25l"); //Cursor unsichtbar machen
-  writeAt(timerPosX, timerPosY, "Zeit: ");
-  writeAt(timerPosX+6, timerPosY, "$timeout");
+  writeAt(TimerPosX, TimerPosY, "Zeit: ");
+  writeAt(TimerPosX+6, TimerPosY, "$timeout");
   setCursor();
 }
 
 void addPoints(int p){  
-  writeAt(timerPosX+13, timerPosY, "Punkte: ", Color.lightBlue);
+  writeAt(TimerPosX+13, TimerPosY, "Punkte: ", Color.LightBlue);
   blockinput = true;
   int sum = points+p;
   if (sum<0){sum=0;}
@@ -77,19 +77,19 @@ void addPoints(int p){
       if (points > sum) { 
         points-=10;
         if (points<0){points=0;}
-        writeAt(timerPosX+20, timerPosY, "$points", Color.lightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
       } else {
         points = sum;
-        writeAt(timerPosX+20, timerPosY, "$points", Color.lightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
         blockinput = true; t.cancel(); startNewTask(); // startNewTask();
       }
     }else{
       if (points < sum) { 
         points+=10;
-        writeAt(timerPosX+20, timerPosY, "$points", Color.lightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
       } else {
         points = sum;
-        writeAt(timerPosX+20, timerPosY, "$points", Color.lightBlue); checkBadge();
+        writeAt(TimerPosX+20, TimerPosY, "${points}", Color.LightBlue); checkBadge();
         blockinput = true;  t.cancel(); startNewTask();//startNewTask(); 
       }
     }    
@@ -111,29 +111,28 @@ void testValues(){
 
 Map<String, String> buildTask(){
 
-  Map<EnumOperatoren, String> lOperatoren = {
-    EnumOperatoren.and:"and",
-    EnumOperatoren.or:"or",
-    EnumOperatoren.not:"not",
-    EnumOperatoren.nand:"nand",
-    EnumOperatoren.nor:"nor",
-    EnumOperatoren.xand:"xand",
-    EnumOperatoren.xor:"xor",
-    EnumOperatoren.asr:"arithmetic shift right",
-    EnumOperatoren.asl:"arithmetic shift left",
-    EnumOperatoren.lsr:"logical shift right",
-    EnumOperatoren.rr:"rotate right", 
-    EnumOperatoren.rl:"rotate left"
+  Map<enumOperatoren, String> lOperatoren = {
+    enumOperatoren.and:"and",
+    enumOperatoren.or:"or",
+    enumOperatoren.not:"not",
+    enumOperatoren.nand:"nand",
+    enumOperatoren.nor:"nor",
+    enumOperatoren.xand:"xand",
+    enumOperatoren.xor:"xor",
+    enumOperatoren.asr:"arithmetic shift right",
+    enumOperatoren.asl:"arithmetic shift left",
+    enumOperatoren.lsr:"logical shift right",
+    enumOperatoren.rr:"rotate right", 
+    enumOperatoren.rl:"rotate left"
   };
 
   int number1 = random.nextInt(0xF);
   int? number2 = random.nextInt(0xF);
   int result = 0;
   
-  int randomIndex = random.nextInt(EnumOperatoren.values.length);
-  EnumOperatoren selectedOperator = EnumOperatoren.values[randomIndex];
-  //selectedOperator = EnumOperatoren.and;
-
+  int randomIndex = random.nextInt(enumOperatoren.values.length);
+  enumOperatoren selectedOperator = enumOperatoren.values[randomIndex];
+  //selectedOperator = enumOperatoren.and;
     Map<String, String> getTask(int result, String operator, int operand1, [int? operand2]){
     Map<String, String> task= { };
     task["operand1"] = operand1.toRadixString(2).padLeft(4, '0');
@@ -149,18 +148,18 @@ Map<String, String> buildTask(){
   }
 
   switch (selectedOperator){
-    case EnumOperatoren.and : result = number1 & number2; 
-    case EnumOperatoren.or  : result = number1 | number2;
-    case EnumOperatoren.xor : result = number1 ^ number2;
-    case EnumOperatoren.xand : result = number1 & number2;
-    case EnumOperatoren.not : result = ~number1; number2 = null;
-    case EnumOperatoren.nand: result = ~(number1 & number2);
-    case EnumOperatoren.nor : result = ~(number1 | number2);
-    case EnumOperatoren.asr : result = number1 >> 1; number2 = null;
-    case EnumOperatoren.asl : result = number1 << 1; number2 = null;
-    case EnumOperatoren.lsr : result = number1 >>> 1; number2 = null;
-    case EnumOperatoren.rl : result = (number1 << 1) | (number1 >> (4 - 1)) & ((1 << 4) - 1); number2 = null;
-    case EnumOperatoren.rr : result = (number1 >> 1) | (number1 << (4 - 1)) & ((1 << 4) - 1); number2 = null;
+    case enumOperatoren.and : result = number1 & number2; 
+    case enumOperatoren.or  : result = number1 | number2;
+    case enumOperatoren.xor : result = number1 ^ number2;
+    case enumOperatoren.xand : result = number1 & number2;
+    case enumOperatoren.not : result = ~number1; number2 = null;
+    case enumOperatoren.nand: result = ~(number1 & number2);
+    case enumOperatoren.nor : result = ~(number1 | number2);
+    case enumOperatoren.asr : result = number1 >> 1; number2 = null;
+    case enumOperatoren.asl : result = number1 << 1; number2 = null;
+    case enumOperatoren.lsr : result = number1 >>> 1; number2 = null;
+    case enumOperatoren.rl : result = (number1 << 1) | (number1 >> (4 - 1)) & ((1 << 4) - 1); number2 = null;
+    case enumOperatoren.rr : result = (number1 >> 1) | (number1 << (4 - 1)) & ((1 << 4) - 1); number2 = null;
   }
 
   Map<String, String> task = getTask( result, lOperatoren[selectedOperator]??"", number1, number2,); 
@@ -181,8 +180,8 @@ void checkBadge(){
     case >400 : myBadge = "Abzeichen";   
     default:
   }
-   writeAt(timerPosX+33, timerPosY, "                  ");
-  if (myBadge.isNotEmpty){ writeAt(timerPosX+33, timerPosY, "($myBadge)", Color.yellow); }
+   writeAt(TimerPosX+33, TimerPosY, "                  ");
+  if (myBadge.length>0){ writeAt(TimerPosX+33, TimerPosY, "(${myBadge})", Color.Yellow); }
   if ( myBadge == "Gold"){ showEndScreen();}
 }
 
@@ -244,11 +243,11 @@ void printTask(){
 }
 
 void checkResult(){
-  writeAt(timerPosX, timerPosY, "                                ");
+  writeAt(TimerPosX, TimerPosY, "                                ");
   if (myResult.join()==task["result"]){
-    writeAt(timerPosX, timerPosY, "richtig", Color.green); addPoints(timeout*10);   
+    writeAt(TimerPosX, TimerPosY, "richtig", Color.Green); addPoints(timeout*10);   
   } else {
-    writeAt(timerPosX, timerPosY, "falsch ", Color.red); if (timeout>0){addPoints( (maxtime-timeout)*-10);} else {timeout*10;}
+    writeAt(TimerPosX, TimerPosY, "falsch ", Color.Red); if (timeout>0){addPoints( (maxtime-timeout)*-10);} else {timeout*10;}
   }
 }
 
@@ -257,7 +256,7 @@ void handleTimer_01(){
     checkResult();
   }
   stdout.write("\x1B[?25l"); //Cursor unsichtbar machen
-  writeAt(timerPosX+6, timerPosY, "$timeout");
+  writeAt(TimerPosX+6, TimerPosY, "$timeout");
   stdout.write("\x1B[?25h"); //Cursor sichtbar machen
   setCursor();
 }
@@ -268,9 +267,9 @@ void startTimer(){
   });
 }
 
-void writeAt(int posX, int posY, [String text="", Color fc = Color.reset,]){ // color optional und default 
-  stdout.write("\x1B[${fontColor[fc]}m\x1B[1m\x1B[$posY;${posX}H$text");  
-  fc = Color.reset;
+void writeAt(int posX, int posY, [String text="", Color fc = Color.Reset,]){ // color optional und default 
+  stdout.write("\x1B[${fontColor[fc]}m\x1B[1m\x1B[${posY};${posX}H${text}");  
+  fc = Color.Reset;
   stdout.write("\x1B[${fontColor[fc]}m\x1B[1m");
 }
 
@@ -279,8 +278,8 @@ void writeChar(String char){ writeAt(cursorPosX, cursorPosY, char); }
 void reset(){
   cursorPosX = 0;
   cursorPosY = 2;   
-  timerPosX = 36;
-  timerPosY = 2;
+  TimerPosX = 36;
+  TimerPosY = 2;
   timeout = maxtime;
   stdout.write("\x1B[2J"); // Bildschirm löschen 
   stdout.write("\x1B[=19h");

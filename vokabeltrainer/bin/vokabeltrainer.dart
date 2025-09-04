@@ -1,6 +1,11 @@
 //#region [rgba(165,245,205,0.1)] ===== todo =====
   /**
    * @todo
+   * test cursor pos speicher und cursor pos laden
+   * vokabeln listen imm 20 und auf eingabe warten
+   * 
+   * vokabeln löschen
+   * lektionen
    * 
   */
 //#endregion ===== todo =====
@@ -103,6 +108,17 @@ void printErrorMessage(String msg, [int duration=5]){
   printMessage(msg,  Color.red);
 }
 
+Future<void> printMessage1(String msg,  {Color fc = Color.white }) async {
+  int posY = 10;
+  await Future.delayed(Duration(seconds: 2)); // Simuliert eine Verzögerung
+  stdout.write("\x1b[s");
+  stdout.write("\x1B[1m\x1B[$posY;0H$tab");  
+  stdout.write("\x1B[${fontColor[fc]}m\x1B[1m");
+  stdout.writeln("$tab$msg");
+  fc = Color.reset;
+  stdout.write("\x1b[u");
+}
+
 void printMessage(String msg,  [Color fc = Color.white]){
   stdout.write("\x1B[${fontColor[fc]}m\x1B[1m");
   stdout.writeln("$tab$msg");
@@ -133,17 +149,18 @@ void menuInput(){
   while (true){
     
     String? userInput = stdin.readLineSync(); userInput=userInput??"";   
-
+  
     switch (userInput){
       case "1" : addVocabulary();
       case "2" : testVocabulary();
       case "3" : exit(1);
+      case ""  : cursorUp(); stdout.write(tab);
 
       default: 
         printErrorMessage("Falsche eingabe");
         //cursorUp(); cursorUp(); deleteLine(); // zeile nach oben
 
-        //printMenuDE(); 
+        //printMenuDE();
     }
   }
 
@@ -158,6 +175,8 @@ void addVocabulary(){
   bool myBreak = false;
   String? wordLang1 =""; 
   String? wordLang2 ="";
+
+
 
   printMessage("Deutsches Wort eingeben: ");
   stdout.write(tab);
@@ -217,7 +236,7 @@ void testVocabulary(){
   }
 
   printMessage("Ergebnis $points von ${vocabulary.length} richtige - \"${ ((points / 112)*100 ~/ 1) }% richtige.");   
-  print("--- Weiter mit Enter oder Leertaste --- ");
+  printMessage("--- Weiter mit Enter oder Leertaste --- ");
   stdin.readByteSync();
   printMenuDE(); 
 }

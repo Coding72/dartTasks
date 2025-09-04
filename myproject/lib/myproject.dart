@@ -26,6 +26,3 @@ class Spiel {
 
   Spiel(this.durchgaenge, this.leben, this.dauer);
 }
-
-
-
